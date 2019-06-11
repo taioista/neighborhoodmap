@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import Map from './MapContainer';
-import * as FoursquareAPI from './FoursquareAPI';
+import * as YelpAPI from './api/YelpAPI';
+import markers from './api/data';
 
-class MapApp extends React.Component {
+class MapApp extends Component {
+
+  getMarkerInformationYelp = (id) => {
+    return YelpAPI.get(id)
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
   render(){
-//TODO passar API_KEY do google e foursquare via props
   return (
       <div className="App">
         <header className="App-header">
           TESTE
         </header>
-        <Map />
+        <Map 
+          markerInformation = {this.getMarkerInformationYelp}
+          markers = {markers}
+        />
       </div>
     );
   }

@@ -14,21 +14,21 @@ export class MapContainer extends Component {
         selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
       };
 
-      onMarkerClick = (props, marker, e) =>
-    this.setState({
-      selectedPlace: props,
-      activeMarker: marker,
-      showingInfoWindow: true
-    });
-
-  onClose = props => {
-    if (this.state.showingInfoWindow) {
+    onMarkerClick = (props, marker, e) =>
       this.setState({
-        showingInfoWindow: false,
-        activeMarker: null
+        selectedPlace: props,
+        activeMarker: marker,
+        showingInfoWindow: true
       });
-    }
-  };
+
+    onClose = props => {
+      if (this.state.showingInfoWindow) {
+        this.setState({
+          showingInfoWindow: false,
+          activeMarker: null
+        });
+      }
+    };
 
     render() {
       return (
@@ -41,19 +41,14 @@ export class MapContainer extends Component {
             lng: -43.241
           }}
         >
-            <Marker
-            onClick={this.onMarkerClick}
-            name={'Shopping Tijuca'}
-    title={'Shopping Tijuca'}
-    position={{lat: -22.9219,
-      lng: -43.2352}} />
-  <Marker
-  onClick={this.onMarkerClick}
-  title={'Tijuca'}
-  name={'Tijuca'}
-    position={{lat: -22.9326,
-      lng: -43.241}} />
-  <Marker />
+          { this.props.markers.map( marker => (
+                <Marker
+                    key={marker.id}
+                    onClick={this.propsonMarkerClick}
+                    name={ marker.name }
+                    title={ marker.title }
+                    position={ marker.position } />
+                ))}
   
         <InfoWindow
           marker={this.state.activeMarker}
@@ -71,10 +66,3 @@ export class MapContainer extends Component {
   export default GoogleApiWrapper({
     apiKey: 'AIzaSyBY4cv_-El7HAoXNHTMWa0jyNXlHo46WmI'
   })(MapContainer);
-  /*
-  export default GoogleApiWrapper(
-  (props) => ({
-    apiKey: props.apiKey
-  }
-))(MapContainer)
-  */
