@@ -7,30 +7,29 @@ const mapStyles = {
 };
 
 export class MapContainer extends Component {
-
-    state = {
-        showingInfoWindow: false,  //Hides or the shows the infoWindow
-        activeMarker: {},          //Shows the active marker upon click
-        selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
-      };
-
-    onMarkerClick = (props, marker, e) =>
-      this.setState({
-        selectedPlace: props,
-        activeMarker: marker,
-        showingInfoWindow: true
-      });
-
-    onClose = props => {
-      if (this.state.showingInfoWindow) {
-        this.setState({
-          showingInfoWindow: false,
-          activeMarker: null
-        });
-      }
-    };
+/*
+markerInformation = { this.getMarkerInformationYelp }
+          markers = { this.state.places }
+          showingInfoWindow = { this.state.showingInfoWindow }
+          activeMarker = { this.state.activeMarker }
+          selectedPlace = { this.state.selectedPlace } */
 
     render() {
+
+      const filteredListMarkers = this.props.markers
+      .filter(marker => marker.name.toLowerCase().indexOf(this.props.filterTerm.toLowerCase()) >= 0)
+      .map(marker => {
+        return (
+          <Marker
+            key={marker.name}
+            title={marker.title}
+            name={marker.name}
+            position={marker.position}
+            onClick={this.props.markerInformation.bind(this)}
+          />
+        )
+      });
+
       return (
         <Map
           google={this.props.google}
@@ -41,24 +40,28 @@ export class MapContainer extends Component {
             lng: -43.241
           }}
         >
-          { this.props.markers.map( marker => (
-                <Marker
-                    key={marker.id}
-                    onClick={this.propsonMarkerClick}
-                    name={ marker.name }
-                    title={ marker.title }
-                    position={ marker.position } />
-                ))}
-  
-        <InfoWindow
-          marker={this.state.activeMarker}
-          visible={this.state.showingInfoWindow}
-          onClose={this.onClose}
-        ><div>
-        <h4>{this.state.selectedPlace.name}</h4>
-      </div>
-    </InfoWindow>
-            </Map>
+          {/*   { this.props.markers.map( marker => (
+                  <Marker
+                      key={marker.id}
+                      onClick={this.propsonMarkerClick}
+                      name={ marker.name }
+                      title={ marker.title }
+                      position={ marker.position } />
+                  ))} */}
+
+          { filteredListMarkers }
+          <InfoWindow
+            marker={ this.props.activeMarker }
+            visible={ this.props.showingInfoWindow }
+            onClose={ this.onClose }
+          >
+   
+          {/*  <div>
+                  <h4>{this.props.selectedPlace.name}</h4>
+              </div> */
+          }
+          </InfoWindow>
+        </Map>
       );
     }
   }
