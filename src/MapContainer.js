@@ -7,61 +7,61 @@ const mapStyles = {
 };
 
 export class MapContainer extends Component {
-/*
-markerInformation = { this.getMarkerInformationYelp }
-          markers = { this.state.places }
-          showingInfoWindow = { this.state.showingInfoWindow }
-          activeMarker = { this.state.activeMarker }
-          selectedPlace = { this.state.selectedPlace } */
 
-    render() {
-
-      const filteredListMarkers = this.props.markers
-      .filter(marker => marker.name.toLowerCase().indexOf(this.props.filterTerm.toLowerCase()) >= 0)
-      .map(marker => {
-        return (
-          <Marker
-            key={marker.name}
-            title={marker.title}
-            name={marker.name}
-            position={marker.position}
-            onClick={this.props.markerInformation.bind(this)}
-          />
-        )
-      });
-
+  getWindowInformation = (info) => {
+    if(info.name)
       return (
-        <Map
-          google={this.props.google}
-          zoom={14}
-          style={mapStyles}
-          initialCenter={{
-            lat: -22.9326,
-            lng: -43.241
-          }}
-        >
-          {/*   { this.props.markers.map( marker => (
-                  <Marker
-                      key={marker.id}
-                      onClick={this.propsonMarkerClick}
-                      name={ marker.name }
-                      title={ marker.title }
-                      position={ marker.position } />
-                  ))} */}
+                <div>
+                  <h4>{info.name}</h4>
+                  <h4>{info.location.display_address}</h4>
+                  <h4>{info.alias}</h4>
+                  <img className="img" src={info.photos[0]} 
+                    alt={info.name} />
+                </div>
+              )
+    else
+      return (<div></div>)
+  }
 
-          { filteredListMarkers }
-          <InfoWindow
-            marker={ this.props.activeMarker }
-            visible={ this.props.showingInfoWindow }
-            onClose={ this.onClose }
-          >
-   
-          {/*  <div>
-                  <h4>{this.props.selectedPlace.name}</h4>
-              </div> */
-          }
-          </InfoWindow>
-        </Map>
+  render() {
+    const filteredListMarkers = this.props.markers
+      .filter(marker => marker.title.toLowerCase().indexOf(this.props.filterTerm.toLowerCase()) >= 0)
+        .map(marker => {
+          return (
+            <Marker
+              key={marker.name}
+              title={marker.title}
+              alt={marker.title}
+              name={marker.id}
+              position={marker.position}
+              onClick={this.props.markerClick.bind(this)}
+              ref={this.props.addMarkersToRef}
+            />
+          )
+        });
+
+      const onClose = this.props.onClose;
+      return (
+        <section className="map">
+          <Map
+            google={this.props.google}
+            zoom={13.5}
+            style={mapStyles}
+            initialCenter={{
+              lat: -22.9326,
+              lng: -43.241
+            }} >
+
+            { filteredListMarkers }
+            <InfoWindow
+              marker={ this.props.activeMarker }
+              visible={ this.props.showingInfoWindow }
+              onClose={ onClose }
+            >
+              {this.getWindowInformation(this.props.markerInformation)}
+            </InfoWindow>
+          </Map>
+        </section>
       );
     }
   }
