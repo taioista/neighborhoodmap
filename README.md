@@ -1,68 +1,38 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Udacity My Neighborhood Map
 
-## Available Scripts
+This is the final project for the Udacity Front End Nanodegree program. The goal of the project was to implement the Google maps api with React to display a list of locations in a certain area and use a third party api to display details about each location.
 
-In the project directory, you can run:
 
-### `npm start`
+## Development Tools
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  - React by [Create React App](https://github.com/facebookincubator/create-react-app)
+  - Google Maps was implement using [google-maps-react](https://www.npmjs.com/package/google-maps-react)
+  - The third party library was Yelp [Yelp Fusion Api](https://www.yelp.com/developers/documentation/v3)
+  - The menu was built using react-burger-menu [react-burger-menu](https://github.com/negomi/react-burger-menu)
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## Development
 
-### `npm test`
+To run this app follow these instructions:
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  - Unzip the files and cd into the project folder
+  - Run `npm install`
+  - Once done run `npm start`
 
-### `npm run build`
+## Deployment
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To get production build and service worker works follow these instructions:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+- Configure your [Github Pages](https://pages.github.com/)
+- `npm run build`: builds the app for production to the build folder
+- `npm run deploy`: deploys the app to GitHub Pages
+- Configure `package.json` informing your `homepage`
+- Run `npm run deploy`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Usage
 
-### `npm run eject`
+In this project you may choose one point of interest in Tijuca neighborhood (Rio de Janeiro, Brazil) through two options:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  - Filter the point by the text filter on the side menu
+  - Click on the point you want do directly in the map
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Then a box with information about the point will be shown powered by Yelp Fusion Api data    

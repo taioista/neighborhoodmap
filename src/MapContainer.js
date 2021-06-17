@@ -9,7 +9,7 @@ const mapStyles = {
 export class MapContainer extends Component {
 
   getWindowInformation = (info) => {
-    if(info.name)
+    if(info && info.alias)
       return (
                 <div>
                   <h4>{info.name}</h4>
@@ -19,7 +19,15 @@ export class MapContainer extends Component {
                     alt={info.name} />
                 </div>
               )
-    else
+    if(info && info.message){
+      return (<div>
+                So a error occurred dear user <br/> 
+                Please contact the suport <br/> 
+                Sorry for the trouble! 
+              </div>)
+    }
+    
+    if(info && !info.name && !info.message)
       return (<div></div>)
   }
 

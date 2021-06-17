@@ -1,31 +1,35 @@
 import React, { Component } from 'react';
 import Map from './MapContainer';
-import Menu from './Menu';
+import Menu from './MenuContainer';
 import * as YelpAPI from './api/YelpAPI';
 import markersData from './api/data';
+import styles from './styles';
 
 class MapApp extends Component {
 
-  state = {
-    showingInfoWindow: false,  //Hides or the shows the infoWindow
-    activeMarker: {},          //Shows the active marker upon click
-    selectedPlace: {},          //Shows the infoWindow to the selected place upon a marker
-    markerClickedInfo: {},
-    places: markersData,
-    filterTerm: '',
-    markersRef: [],
-    menuClass: 'menu'
-  };
+  constructor(props) {
+    super(props)
 
-  onHamburgerClick = () => {
-    debugger
-    let className = 'menu';
-    if(this.state.menuClass === 'menu')
-      className = 'toggle'
+    const mql = window.matchMedia('(min-width: 768px)')
 
-    this.setState({
-      menuClass: className
-    })
+    this.state = {
+      showingInfoWindow: false,  //Hides or the shows the infoWindow
+      activeMarker: {},          //Shows the active marker upon click
+      selectedPlace: {},          //Shows the infoWindow to the selected place upon a marker
+      markerClickedInfo: {},
+      places: markersData,
+      filterTerm: '',
+      markersRef: [],
+      menuIsOpen: mql.matches,
+      menuIsSticky: mql.matches
+    }
+
+    mql.onchange = e => {
+      this.setState({
+        menuIsOpen: e.matches,
+        menuIsSticky: e.matches,
+      })
+    }
   }
 
   addMarkersToRef = (ref) => {
@@ -42,15 +46,33 @@ class MapApp extends Component {
     this.cleanInfoWindowData();
     YelpAPI.get(marker.name)
     .then(info => {
-      debugger
-      this.setState({
-        selectedPlace: props,
-        activeMarker: marker,
-        showingInfoWindow: true,
-        markerClickedInfo: info
-      })
+      this.animateClickedMarker(marker)
+      this.setClickedMarker(marker, props, info)
+    })
+    .catch(error => {
+      this.animateClickedMarker(marker)
+      this.setClickedMarker(marker, props, error)
     })
   };
+
+  animateClickedMarker = (marker) => {
+    this.state.markersRef.forEach(m => {
+      if (m.marker.name === marker.name) {
+        marker.setAnimation(1);
+      } else {
+        m.marker.setAnimation(null);
+      }
+    })
+  }
+
+  setClickedMarker = (marker, props, info) => {
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true,
+      markerClickedInfo: info
+    })
+  }
 
   onItemListClick = (markerTitle) => {
     this.state.markersRef
@@ -69,12 +91,15 @@ class MapApp extends Component {
     })
   }
 
-  onClose = props => {
+  onClose = () => {
     if (this.state.showingInfoWindow) {
       this.setState({
         showingInfoWindow: false,
         activeMarker: null
       });
+      this.state.markersRef.forEach(m => {
+        m.marker.setAnimation(null);
+      })
     }
   };
 
@@ -82,9 +107,17 @@ class MapApp extends Component {
     this.setState({ filterTerm: term });
   }
 
+  handleMenuStateChange = state => {
+    this.setState({ menuIsOpen: state.isOpen })
+  }
+
+  handleMenuButtonClick = () => {
+    this.setState(state => ({ menuIsOpen: !state.menuIsOpen }))
+  }
+
   render(){
   return (
-      <div>
+      <div id="container">
         <header className="header">
           <nav>
             <h1>My Neighborhood Map Tijuca!</h1>
@@ -92,13 +125,18 @@ class MapApp extends Component {
         </header>
         <main>
           <Menu 
+            styles = {styles}
             filterTerm = { this.state.filterTerm }
             markers = { this.state.places }
             itemListClick = { this.onItemListClick }
             updateFilterTerm = { this.updateFilterTerm }
-            menuClass = {this.state.menuClass}
-            onHamburgerClick = { this.onHamburgerClick }
+            menuIsOpen = { this.state.menuIsOpen }
+            menuIsSticky = { this.state.menuIsSticky }
+            outerContainerId={"container"}
+            handleMenuButtonClick={this.handleMenuButtonClick}
+            handleMenuStateChange={this.handleMenuStateChange}
           />
+          
           <Map 
             markerClick = { this.onMarkerClick }
             markerInformation = { this.state.markerClickedInfo }
